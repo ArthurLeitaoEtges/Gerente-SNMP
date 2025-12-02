@@ -1,0 +1,19 @@
+{
+  "name": "snmp-web",
+  "version": "1.0.0",
+  "description": "Web interface para consultar OIDs SNMP do backend Flask",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.3.4",
+    "axios": "^1.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.3.4",
+    "vite": "^4.4.9"
+  }
+}

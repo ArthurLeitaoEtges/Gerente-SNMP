@@ -1,0 +1,132 @@
+ISCOVERY-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE, experimental, Integer32, Gauge32, Counter32, TimeTicks, IpAddress
+        FROM SNMPv2-SMI
+    DisplayString, TEXTUAL-CONVENTION
+        FROM SNMPv2-TC
+    OBJECT-GROUP, MODULE-COMPLIANCE
+        FROM SNMPv2-CONF;
+
+-- Modulo experimental
+-- OID base: 1.3.6.1.3.2025
+discoveryMIB MODULE-IDENTITY
+    LAST-UPDATED "202510020000Z"
+    ORGANIZATION "Projeto Autodescoberta"
+    CONTACT-INFO "Seu Nome - email@exemplo.com"
+    DESCRIPTION "MIB experimental para representar informacoes da ferramenta de autodescoberta de dispositivos."
+
+    REVISION "202510020000Z"
+    DESCRIPTION "Versao inicial da MIB."
+::= { experimental 2025 }
+
+-- Nos raiz
+discoveryObjects        OBJECT IDENTIFIER ::= { discoveryMIB 1 }
+discoveryTableRoot      OBJECT IDENTIFIER ::= { discoveryMIB 2 }
+discoveryConfig         OBJECT IDENTIFIER ::= { discoveryMIB 3 }
+
+-- Estatisticas gerais
+discoveryRuns OBJECT-TYPE
+    SYNTAX       Counter32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION "Numero de execucoes (runs) da ferramenta de descoberta."
+::= { discoveryObjects 1 }
+
+devicesFound OBJECT-TYPE
+    SYNTAX       Gauge32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION "Numero atual de dispositivos descobertos."
+::= { discoveryObjects 2 }
+
+lastDiscoveryTime OBJECT-TYPE
+    SYNTAX       TimeTicks
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION "Tempo (TimeTicks) desde a ultima descoberta."
+::= { discoveryObjects 3 }
+
+-- Configuracao administrativa
+scanInterval OBJECT-TYPE
+    SYNTAX       Integer32 (10..86400)
+    MAX-ACCESS   read-write
+    STATUS       current
+    DESCRIPTION "Intervalo em segundos para descoberta automatica."
+::= { discoveryConfig 1 }
+
+logLevel OBJECT-TYPE
+    SYNTAX       Integer32 (0..3)
+    MAX-ACCESS   read-write
+    STATUS       current
+    DESCRIPTION "Nivel de log: 0=off,1=error,2=info,3=debug."
+::= { discoveryConfig 2 }
+
+-- Tabela de dispositivos
+discoveryTable OBJECT-TYPE
+    SYNTAX       SEQUENCE OF DiscoveryEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION "Tabela de dispositivos descobertos."
+::= { discoveryTableRoot 1 }
+
+discoveryEntry OBJECT-TYPE
+    SYNTAX       DiscoveryEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION "Uma linha da tabela de dispositivos."
+    INDEX        { deviceIndex }
+::= { discoveryTable 1 }
+
+DiscoveryEntry ::= SEQUENCE {
+    deviceIndex      Integer32,
+    deviceIp         IpAddress,
+    deviceName       DisplayString,
+    deviceMac        OCTET STRING,
+    responseTime     TimeTicks,
+    lastSeen         TimeTicks
+}
+
+deviceIndex OBJECT-TYPE
+    SYNTAX       Integer32 (1..65535)
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION "Indice da entrada na tabela."
+::= { discoveryEntry 1 }
+
+deviceIp OBJECT-TYPE
+    SYNTAX       IpAddress
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION "Endereco IPv4 do dispositivo descoberto."
+::= { discoveryEntry 2 }
+
+deviceName OBJECT-TYPE
+    SYNTAX       DisplayString (SIZE (0..64))
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION "Hostname ou nome anunciado do dispositivo."
+::= { discoveryEntry 3 }
+
+deviceMac OBJECT-TYPE
+    SYNTAX       OCTET STRING (SIZE (6))
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION "Endereco MAC (6 bytes)."
+::= { discoveryEntry 4 }
+
+responseTime OBJECT-TYPE
+    SYNTAX       TimeTicks
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION "Tempo de resposta medido na varredura (TimeTicks)."
+::= { discoveryEntry 5 }
+
+lastSeen OBJECT-TYPE
+    SYNTAX       TimeTicks
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION "Ticks desde a ultima vez que o dispositivo foi visto."
+::= { discoveryEntry 6 }
+
+END
