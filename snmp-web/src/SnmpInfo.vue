@@ -1,7 +1,7 @@
 <template>
   <div class="snmp-info-container">
     <div class="snmp-card">
-      <h1>🔍 Consultor SNMP</h1>
+      <h1>Consultor SNMP</h1>
       <p class="subtitle">Consulte valores de OIDs no agente SNMP local</p>
 
       <div class="form-group">
@@ -53,15 +53,15 @@
       </div>
 
       <button @click="querySnmp" :disabled="loading" class="btn-primary">
-        <span v-if="!loading">🚀 Consultar OID</span>
-        <span v-else>⏳ Consultando...</span>
+        <span v-if="!loading"> Consultar OID</span>
+        <span v-else>Consultando...</span>
       </button>
 
       <div v-if="loading" class="spinner"></div>
 
       <!-- Resultado de sucesso -->
       <div v-if="result && !error" class="result-container success">
-        <h2>✅ Resultado</h2>
+        <h2>Resultado</h2>
         <div class="result-item">
           <span class="label">OID:</span>
           <span class="value">{{ result.oid }}</span>
@@ -78,7 +78,7 @@
 
       <!-- Resultado de erro -->
       <div v-if="error" class="result-container error">
-        <h2>❌ Erro</h2>
+        <h2>Erro</h2>
         <div class="error-message">{{ error }}</div>
         <div v-if="errorDetails" class="error-details">
           <strong>Detalhes:</strong> {{ errorDetails }}
@@ -87,7 +87,7 @@
 
       <!-- Histórico -->
       <div v-if="history.length > 0" class="history-container">
-        <h3>📋 Histórico de Consultas</h3>
+        <h3>Histórico de Consultas</h3>
         <ul class="history-list">
           <li v-for="(item, index) in history" :key="index" class="history-item">
             <span class="history-oid">{{ item.oid }}</span>
@@ -195,93 +195,107 @@ export default {
 </script>
 
 <style scoped>
+
+/* ===== CONTAINER GERAL ===== */
 .snmp-info-container {
-  padding: 20px;
+  padding: 30px;
+  background: #0b0f17;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
 }
 
+/* ===== CARD PRINCIPAL ===== */
 .snmp-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  background: #121826;
+  border-radius: 14px;
   padding: 40px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 255, 255, 0.06);
 }
 
+/* ===== TÍTULOS ===== */
 h1 {
-  color: #667eea;
-  margin-bottom: 10px;
-  font-size: 28px;
+  color: #00db8bff;
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  letter-spacing: 0.5px;
 }
 
 .subtitle {
-  color: #666;
-  margin-bottom: 30px;
+  color: #8aa0b4;
+  margin-bottom: 35px;
   font-size: 14px;
 }
 
+/* ===== FORMS ===== */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
-  font-weight: 600;
+  color: #c7d4e0;
   font-size: 14px;
+  font-weight: 600;
 }
 
+/* INPUTS estilo NETDATA */
 .input-field {
   width: 100%;
-  padding: 12px;
-  border: 2px solid #e0e0e0;
-  border-radius: 6px;
+  padding: 14px;
+  background: #0f1724;
+  border: 1px solid #1a2638;
+  border-radius: 8px;
   font-size: 14px;
-  transition: all 0.3s ease;
+  color: #e0e8f0;
+  transition: 0.25s;
 }
 
 .input-field:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #00db8bff;
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.4);
 }
 
 .info-text {
-  display: block;
   margin-top: 5px;
-  color: #999;
+  color: #7c8897;
   font-size: 12px;
 }
 
+/* ===== BOTÃO PRIMÁRIO estilo NETDATA ===== */
 .btn-primary {
   width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  padding: 14px;
+  background: linear-gradient(135deg, #00db8bff 0%, #00db8bff 100%);
+  color: #0b0f17;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 20px;
+  transition: 0.3s;
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 255, 210, 0.4);
 }
 
 .btn-primary:disabled {
-  opacity: 0.6;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
+/* ===== SPINNER ===== */
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #667eea;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid #00db8bff;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   animation: spin 1s linear infinite;
   margin: 20px auto;
 }
@@ -291,21 +305,22 @@ label {
   100% { transform: rotate(360deg); }
 }
 
+/* ===== RESULTADOS (SUCCESS / ERROR) ===== */
 .result-container {
-  margin: 20px 0;
-  padding: 20px;
-  border-radius: 8px;
+  margin: 25px 0;
+  padding: 22px;
+  border-radius: 10px;
   border-left: 4px solid;
 }
 
 .result-container.success {
-  background: #f0fdf4;
-  border-left-color: #22c55e;
+  background: rgba(0, 255, 150, 0.05);
+  border-left-color: #00ffa3;
 }
 
 .result-container.error {
-  background: #fef2f2;
-  border-left-color: #ef4444;
+  background: rgba(255, 60, 60, 0.06);
+  border-left-color: #ff4f4f;
 }
 
 .result-container h2 {
@@ -314,18 +329,19 @@ label {
 }
 
 .result-container.success h2 {
-  color: #22c55e;
+  color: #00ffa3;
 }
 
 .result-container.error h2 {
-  color: #ef4444;
+  color: #ff6666;
 }
 
+/* Resultado item */
 .result-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .result-item:last-child {
@@ -333,40 +349,42 @@ label {
 }
 
 .label {
+  color: #dce3eb;
   font-weight: 600;
-  color: #333;
 }
 
 .value {
-  color: #666;
+  color: #8aa0b4;
   word-break: break-all;
 }
 
+/* ===== ERROS DETALHADOS ===== */
 .error-message {
-  color: #dc2626;
-  font-weight: 600;
-  margin-bottom: 10px;
+  color: #ff4f4f;
+  font-weight: 700;
 }
 
 .error-details {
-  color: #666;
+  color: #c9d2df;
   font-size: 14px;
-  background: rgba(0, 0, 0, 0.05);
-  padding: 10px;
-  border-radius: 4px;
+  background: #1a2333;
+  padding: 12px;
+  border-radius: 6px;
   margin-top: 10px;
 }
 
+/* ===== HISTÓRICO ===== */
 .history-container {
-  margin-top: 30px;
+  margin-top: 35px;
   padding-top: 30px;
-  border-top: 2px solid #e0e0e0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .history-container h3 {
-  color: #333;
+  color: #00db8bff;
   margin-bottom: 15px;
-  font-size: 16px;
+  font-size: 17px;
+  font-weight: 600;
 }
 
 .history-list {
@@ -375,59 +393,64 @@ label {
 }
 
 .history-item {
+  padding: 12px;
+  border-radius: 6px;
+  background: #0f1724;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background: #f9f9f9;
-  border-radius: 4px;
+  color: #d0d8e3;
   margin-bottom: 8px;
   font-size: 13px;
 }
 
 .history-oid {
-  color: #667eea;
-  font-family: 'Courier New', monospace;
+  color: #00ffa3;
+  font-family: "Courier New", monospace;
   flex: 1;
   word-break: break-all;
 }
 
 .history-status {
   margin-left: 10px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .history-status.success {
-  color: #22c55e;
+  color: #00ffa3;
 }
 
 .history-status.error {
-  color: #ef4444;
+  color: #ff4f4f;
 }
 
+/* ===== BOTÃO SECUNDÁRIO ===== */
 .btn-secondary {
   width: 100%;
-  padding: 10px;
-  background: #e0e0e0;
-  color: #333;
-  border: none;
+  padding: 12px;
+  background: #1a2333;
+  color: #9fb5cc;
+  border: 1px solid #233044;
   border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.2s;
 }
 
 .btn-secondary:hover {
-  background: #d0d0d0;
+  background: #243044;
+  border-color: #2e4057;
 }
 
+/* ===== RESPONSIVO ===== */
 @media (max-width: 600px) {
   .snmp-card {
-    padding: 20px;
+    padding: 22px;
   }
 
   h1 {
-    font-size: 24px;
+    font-size: 26px;
   }
 }
+
 </style>
